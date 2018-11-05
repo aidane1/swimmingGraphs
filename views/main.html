@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src = "https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <style>
+        * {
+            font-family: sans-serif
+        }
+        .chart {
+            width: 500px;
+            display: inline-block;
+        }
+        @media screen and (max-width: 768px) {
+            .chart {
+                width: 100%;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+    Swimmer Id: <input type = "text" id = 'swimmerIdName' /><button value = "enter" onclick = "getChartsFunction()">Enter</button>
+</body>
+    <script>
+        function getChartsFunction() {
+            let xmlhttp;
+            if (window.XMLHttpRequest) {
+            // code for modern browsers
+            xmlhttp = new XMLHttpRequest();
+            } else {
+            // code for old IE browsers
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    if (this.responseText) {
+                        document.body.innerHTML = "";
+                        let swimmerObject = JSON.parse(this.responseText);
+                        makeChart(swimmerObject);
+                    }
+                }
+            }
+            let string = `/athleteEvents?athleteId=${document.getElementById('swimmerIdName').value}`;
+            console.log(string);
+            xmlhttp.open("GET", string, true);
+            xmlhttp.send();    
+        }
+
+        function timeToSeconds(time) {
+            newTime = time.split(/\.|\:/);
+            if (newTime.length === 3) {
+                return parseInt(newTime[0])*60 + parseInt(newTime[1]) + parseInt(newTime[2])/100;
+            } else if (newTime.length === 2) {
+                return parseInt(newTime[0]) + parseInt(newTime[1])/100;
+            }
+            // return [newTime, time];
+            return newTime;   
+        }
+        function makeChart(swimmer) {
+            for (var key in swimmer.events) {
+
+                for (var m = 0; m < 2; m++) {
+                    let events;
+                    let eventName;
+                    if (m === 0) {
+                        events = swimmer.events[key].shortCourse.times;
+                        eventName = swimmer.events[key].eventName + " (SCM)";
+                    } else {
+                        events = swimmer.events[key].longCourse.times;
+                        eventName = swimmer.events[key].eventName + " (LCM)";
+                    }
+                    var options = {
+                        chart: {
+                            type: 'line'
+                        },
+                        title: {
+                            text: eventName,
+                            style: {
+                                fontSize: "20px",
+                                fontWeight: "900"
+                            }
+                        },
+                        series: [{
+                            name: 'Time',
+                            data: [
+                                
+                            ]
+                        }],
+                        markers: {
+                            size: 0
+                        },
+                        xaxis: {
+                            type: "datetime",
+                        },
+                        yaxis: {
+                            labels: {
+                                formatter: function(value) {
+                                    let minutes = Math.floor(value/60);
+                                    let seconds = Math.floor(value%60);
+                                    let hundredth = Math.round(value%1*100);
+                                    return `${minutes}:${seconds.toString().length === 1 ? "0" + seconds.toString() : seconds.toString()}.${hundredth.toString().length === 1 ? hundredth.toString() + "0" : hundredth.toString()}`
+                                }
+                            }
+                        }
+                    }
+                    for (var i = 0; i < events.length; i++) {
+                        options.series[0].data.push({
+                            x: Date.parse(events[i].dateGotten),
+                            y: timeToSeconds(events[i].time)
+                        })
+                    }
+
+                    let chartBox = document.createElement("div");
+
+                    chartBox.className = "chart";
+
+                    document.body.appendChild(chartBox);
+
+                    var chart = new ApexCharts(chartBox, options);
+
+                    chart.render();
+                }
+            }
+        }       
+    </script>
+</html>
