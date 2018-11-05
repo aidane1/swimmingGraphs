@@ -9,7 +9,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/swimmers", {useNewUrlParser: true});
 
 mongoose.connection.once("open", function() {
   console.log("connection has been made");
-//   user();
+  user();
 }).on("error", function(error) {
   console.log("connection error: " + error);
 });
@@ -149,16 +149,16 @@ async function getEventInfo(event, id) {
 //         }
 //     }
 // }
-// async function user() {
-//     for (var i = 0; i < codeNamePairs.length; i++) {
-//         let currentSwimmer = {
-//             firstName: codeNamePairs[i][1],
-//             lastName: codeNamePairs[i][2],
-//             swimmerId: codeNamePairs[i][0]
-//         }
-//         await Swimmer.create(currentSwimmer);
-//     }
-// }
+async function user() {
+    for (var i = 0; i < codeNamePairs.length; i++) {
+        let currentSwimmer = {
+            firstName: codeNamePairs[i][1],
+            lastName: codeNamePairs[i][2],
+            swimmerId: codeNamePairs[i][0]
+        }
+        await Swimmer.create(currentSwimmer);
+    }
+}
 
 
 
