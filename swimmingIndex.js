@@ -103,62 +103,62 @@ async function getEventInfo(event, id) {
     })
   })
 }
-// async function user() {
-//     await Swimmer.create({firstName: "Dicks", lastName: "dic", swimmerId: "3"});
-// }
-// async function user() {
-//     for (var i = 0; i < codeNamePairs.length; i++) {
-//         let currentObject = await Swimmer.findOne({swimmerId : codeNamePairs[i][0].toString()});
-//         for (var key in idToEvent) {
-//             let times = await getEventInfo(key, codeNamePairs[i][0].toString());
-//             let pushStringShort = `events.e_${times[0].event.split(" ").join("")}.shortCourse.times`;
-//             let pushStringLong = `events.e_${times[0].event.split(" ").join("")}.longCourse.times`;
-//             let pushObjectShort = [
-                
-//             ];
-//             let pushObjectLong = [
-
-//             ];
-//             for (var j = 0; j < times[0].times.length; j++) {
-//                 let current = times[0].times[j];
-//                 pushObjectShort.push({
-//                     dateGotten: current[2],
-//                     time: current[0],
-//                     points: parseInt(current[1]),
-//                     city: current[3]
-//                 })
-//             }
-//             for (var j = 0; j < times[1].times.length; j++) {
-//                 let current = times[1].times[j];
-//                 pushObjectLong.push({
-//                     dateGotten: current[2],
-//                     time: current[0],
-//                     points: parseInt(current[1]),
-//                     city: current[3]
-//                 })
-//             }
-//             updateObject = {
-                
-//             }
-//             updateObject[pushStringShort] = pushObjectShort;
-//             updateObject[pushStringLong] = pushObjectLong;
-//             let newSwimmer = await Swimmer.findOneAndUpdate({_id : currentObject._id}, {$set: updateObject});
-//             console.log(newSwimmer);
-            
-            
-//         }
-//     }
-// }
+async function user() {
+    await Swimmer.create({firstName: "Dicks", lastName: "dic", swimmerId: "3"});
+}
 async function user() {
     for (var i = 0; i < codeNamePairs.length; i++) {
-        let currentSwimmer = {
-            firstName: codeNamePairs[i][1],
-            lastName: codeNamePairs[i][2],
-            swimmerId: codeNamePairs[i][0]
+        let currentObject = await Swimmer.findOne({swimmerId : codeNamePairs[i][0].toString()});
+        for (var key in idToEvent) {
+            let times = await getEventInfo(key, codeNamePairs[i][0].toString());
+            let pushStringShort = `events.e_${times[0].event.split(" ").join("")}.shortCourse.times`;
+            let pushStringLong = `events.e_${times[0].event.split(" ").join("")}.longCourse.times`;
+            let pushObjectShort = [
+                
+            ];
+            let pushObjectLong = [
+
+            ];
+            for (var j = 0; j < times[0].times.length; j++) {
+                let current = times[0].times[j];
+                pushObjectShort.push({
+                    dateGotten: current[2],
+                    time: current[0],
+                    points: parseInt(current[1]),
+                    city: current[3]
+                })
+            }
+            for (var j = 0; j < times[1].times.length; j++) {
+                let current = times[1].times[j];
+                pushObjectLong.push({
+                    dateGotten: current[2],
+                    time: current[0],
+                    points: parseInt(current[1]),
+                    city: current[3]
+                })
+            }
+            updateObject = {
+                
+            }
+            updateObject[pushStringShort] = pushObjectShort;
+            updateObject[pushStringLong] = pushObjectLong;
+            let newSwimmer = await Swimmer.findOneAndUpdate({_id : currentObject._id}, {$set: updateObject});
+            console.log(newSwimmer);
+            
+            
         }
-        await Swimmer.create(currentSwimmer);
     }
 }
+// async function user() {
+//     for (var i = 0; i < codeNamePairs.length; i++) {
+//         let currentSwimmer = {
+//             firstName: codeNamePairs[i][1],
+//             lastName: codeNamePairs[i][2],
+//             swimmerId: codeNamePairs[i][0]
+//         }
+//         await Swimmer.create(currentSwimmer);
+//     }
+// }
 
 
 
