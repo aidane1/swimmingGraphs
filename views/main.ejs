@@ -10,6 +10,11 @@
         * {
             font-family: sans-serif
         }
+        body, html {
+            width: 100%;
+            padding: 0;
+            margin: 0;
+        }
         .chart {
             width: 500px;
             display: inline-block;
@@ -23,9 +28,12 @@
     </style>
 </head>
 <body>
-    Swimmer Id: <input type = "text" id = 'swimmerIdName' /><button value = "enter" onclick = "getChartsFunction()">Enter</button>
+    Swimmer Id: <input type = "text" id = 'swimmerIdName' value = "<%=id%>"/><button value = "enter" onclick = "getChartsFunction()">Enter</button>
 </body>
     <script>
+        <% if (id) { %>
+            getChartsFunction();
+        <% } %>
         function getChartsFunction() {
             let xmlhttp;
             if (window.XMLHttpRequest) {

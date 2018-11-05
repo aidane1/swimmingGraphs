@@ -9,7 +9,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/swimmers", {useNewUrlParser: true});
 
 mongoose.connection.once("open", function() {
   console.log("connection has been made");
-  user();
+  // user();
 }).on("error", function(error) {
   console.log("connection error: " + error);
 });
@@ -39,6 +39,7 @@ let idToEvent = {
 }
 
 let app = express();
+app.set("view engine", "ejs");
 let urlencodedParser = bodyParser.urlencoded({extended: false});
 
 let server = app.listen(5555, function() {
@@ -46,7 +47,12 @@ let server = app.listen(5555, function() {
 });
 
 app.get("/", function(req, res) {
-    res.sendFile(__dirname + "/views/main.html");
+    if (req.query.athleteId) {
+      res.render("main", {id : req.query.athleteId});
+    } else {
+      // res.sendFile(__dirname + "/views/main.html");  
+      res.render("main", {id : ""});
+    }
 });
 
 app.get("/athleteEvents", function(req, res) {
@@ -103,52 +109,52 @@ async function getEventInfo(event, id) {
     })
   })
 }
-async function user() {
-    await Swimmer.create({firstName: "Dicks", lastName: "dic", swimmerId: "3"});
-}
-async function user() {
-    for (var i = 0; i < codeNamePairs.length; i++) {
-        let currentObject = await Swimmer.findOne({swimmerId : codeNamePairs[i][0].toString()});
-        for (var key in idToEvent) {
-            let times = await getEventInfo(key, codeNamePairs[i][0].toString());
-            let pushStringShort = `events.e_${times[0].event.split(" ").join("")}.shortCourse.times`;
-            let pushStringLong = `events.e_${times[0].event.split(" ").join("")}.longCourse.times`;
-            let pushObjectShort = [
+// async function user() {
+//     await Swimmer.create({firstName: "Dicks", lastName: "dic", swimmerId: "3"});
+// }
+// async function user() {
+//     for (var i = 0; i < codeNamePairs.length; i++) {
+//         let currentObject = await Swimmer.findOne({swimmerId : codeNamePairs[i][0].toString()});
+//         for (var key in idToEvent) {
+//             let times = await getEventInfo(key, codeNamePairs[i][0].toString());
+//             let pushStringShort = `events.e_${times[0].event.split(" ").join("")}.shortCourse.times`;
+//             let pushStringLong = `events.e_${times[0].event.split(" ").join("")}.longCourse.times`;
+//             let pushObjectShort = [
                 
-            ];
-            let pushObjectLong = [
+//             ];
+//             let pushObjectLong = [
 
-            ];
-            for (var j = 0; j < times[0].times.length; j++) {
-                let current = times[0].times[j];
-                pushObjectShort.push({
-                    dateGotten: current[2],
-                    time: current[0],
-                    points: parseInt(current[1]),
-                    city: current[3]
-                })
-            }
-            for (var j = 0; j < times[1].times.length; j++) {
-                let current = times[1].times[j];
-                pushObjectLong.push({
-                    dateGotten: current[2],
-                    time: current[0],
-                    points: parseInt(current[1]),
-                    city: current[3]
-                })
-            }
-            updateObject = {
+//             ];
+//             for (var j = 0; j < times[0].times.length; j++) {
+//                 let current = times[0].times[j];
+//                 pushObjectShort.push({
+//                     dateGotten: current[2],
+//                     time: current[0],
+//                     points: parseInt(current[1]),
+//                     city: current[3]
+//                 })
+//             }
+//             for (var j = 0; j < times[1].times.length; j++) {
+//                 let current = times[1].times[j];
+//                 pushObjectLong.push({
+//                     dateGotten: current[2],
+//                     time: current[0],
+//                     points: parseInt(current[1]),
+//                     city: current[3]
+//                 })
+//             }
+//             updateObject = {
                 
-            }
-            updateObject[pushStringShort] = pushObjectShort;
-            updateObject[pushStringLong] = pushObjectLong;
-            let newSwimmer = await Swimmer.findOneAndUpdate({_id : currentObject._id}, {$set: updateObject});
-            console.log(newSwimmer);
+//             }
+//             updateObject[pushStringShort] = pushObjectShort;
+//             updateObject[pushStringLong] = pushObjectLong;
+//             let newSwimmer = await Swimmer.findOneAndUpdate({_id : currentObject._id}, {$set: updateObject});
+//             console.log(newSwimmer);
             
             
-        }
-    }
-}
+//         }
+//     }
+// }
 // async function user() {
 //     for (var i = 0; i < codeNamePairs.length; i++) {
 //         let currentSwimmer = {
